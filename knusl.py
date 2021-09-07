@@ -19,7 +19,7 @@ import json
 class KnuSL(): #단어 사전 클래스 생성
 
 	def data_list(wordname): #단어 어근, 극성 분석 함수 생성	
-		with open('data/SentiWord_info.json', encoding='utf-8-sig', mode='r') as f: #단어 극성치 사전 파일 읽기 모드로 열기
+		with open('SentiWord_info.json', encoding='utf-8-sig', mode='r') as f: #단어 극성치 사전 파일 읽기 모드로 열기
 			data = json.load(f) #json 파일 디코딩
 		result = ['None','None'] #단어가 사전에서 검색되지 않을 경우에 반환값, 초기값	
 		for i in range(0, len(data)): 
@@ -33,10 +33,20 @@ class KnuSL(): #단어 사전 클래스 생성
 		s_word = result[1] #단어의 극성치값
 							
 		print('어근 : ' + r_word)
-		print('극성 : ' + s_word)		
-		
-		
-		return r_word, s_word #어근, 극성치값 반환
+		print('극성 : ' + s_word)
+		return r_word, s_word
+
+	def sentiment_score(wordname):
+		with open('SentiWord_info.json', encoding='utf-8-sig', mode='r') as f: #단어 극성치 사전 파일 읽기 모드로 열기
+			data = json.load(f)
+		result = ['None','None'] #단어가 사전에서 검색되지 않을 경우에 반환값, 초기값	
+		for i in range(0, len(data)): 
+			if data[i]['word'] == wordname: #i번째 단어와 사전을 비교해서 단어가 존재하는지 확인 존재하면 아래 코드 실행
+				result.pop() #어근값과 극성치값 삭제
+				result.pop()
+				result.append(data[i]['word_root']) #데이터 리스트에 어근 추가
+				result.append(data[i]['polarity'])	 #데이터 리스트에 극성치값 추가
+		return int(result[1])
 
 if __name__ == "__main__":
 	
@@ -61,10 +71,10 @@ if __name__ == "__main__":
 			sent.append(x[i][0]+"다") #VV(동사) + 어미 '다' 로 사전 기본형 생성
 		if x[i][1] == "MAG" and x[i + 1][1] == "VA":
 			sent.append(x[i][0]+x[i + 1][0]+"다")
-		y = ksl.data_list(x[i][0] + "다")
+		"""y = ksl.sentiment_score(x[i][0] + "다")
 		score += y[1] 	
 		if i == len(x):
-			score /= len(x)
+			score /= len(x)"""
 
 	print(x) 
 	for i in sent: print(i)
