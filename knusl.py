@@ -78,15 +78,17 @@ if __name__ == "__main__":
 
 	print(x) 
 	for i in sent: print(i)
-
+	sentn = []
 	for i in sent: 
 		wordname = i
 		wordname = wordname.strip(" ") #큰따옴표 제거		
 		if wordname != "#": #사전 검색 유지
-			print(ksl.data_list(wordname))
-			print("\n")	
-				
-
-		elif wordname == "#": #사전 검색 종료
-			print("\n이용해주셔서 감사합니다~ :)")
-			break
+			if ksl.data_list(wordname)[1] != "None" :
+				sentn.append(ksl.data_list(wordname)[1])
+			print("\n")
+	
+	sentv = 0
+	for i in sentn :
+		print(i)
+		sentv += int(i) / len(sentn)
+	print("Average: ",sentv)
